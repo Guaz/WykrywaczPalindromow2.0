@@ -16,42 +16,53 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity {
 
-    DbHelper myDb;
+    @BindView(R.id.button)
+    Button button;
+
+    @BindView(R.id.editText)
+    EditText editText;
+
+    @BindView(R.id.textView)
+    TextView textView;
+
+    @BindView(R.id.listView)
+    ListView listView;
+
+    private DbHelper myDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         myDb = new DbHelper(this);
-        Button btn = (Button) findViewById(R.id.button);
-        //Zmienne do ListView
-        final ListView listView = (ListView) findViewById(R.id.listView);
         final ArrayList<String> data = new ArrayList<String>();
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, data);
         listView.setAdapter(adapter);
-        //Wyczyszczenie listy
+
         myDb.deleteAll();
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                EditText wpisanyTekst = (EditText) findViewById(R.id.editText);
-                Editable wpis = wpisanyTekst.getText();
-                String wpisString = wpis.toString();
-                boolean czyPalindrom;
+                String wpisString = editText.getText().toString();
+                boolean isPalindrom;
                 //Wywołanie isPalindrome
-                czyPalindrom = isPalindrome(wpisString);
-                TextView poleTekstowe = (TextView) findViewById(R.id.textView);
+                isPalindrom = isPalindrome(wpisString);
 
-                if (czyPalindrom == true) {
-                    poleTekstowe.setText("Wyrazenie jest palindromem");
+                if (isPalindrom == true) {
+                    textView.setText("Wyrazenie jest palindromem");
                 } else {
-                    poleTekstowe.setText("Wyrazenie nie jest palindromem");
+                    textView.setText("Wyrazenie nie jest palindromem");
                 }
-                boolean isInserted = myDb.insertData(wpisString, czyPalindrom);
+                boolean isInserted = myDb.insertData(wpisString, isPalindrom);
 
                 if (isInserted == true){
                     Toast.makeText(MainActivity.this, "Wpis zapisano.", Toast.LENGTH_SHORT).show();
@@ -64,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 Cursor c = myDb.getData();
                 String id = "";
                 String content = "";
-                String result = "";
+                String result;
                 int resultInt = 0;
 
                 while(c.moveToNext()) {
@@ -74,10 +85,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if (resultInt == 1) {
-                    // Prawda
                     result = "palindrom";
                 } else {
-                    // Falsz
                     result = "nie palindrom";
                 }
 
@@ -87,9 +96,8 @@ public class MainActivity extends AppCompatActivity {
         }
     );
 
-    // Sprawdzenie czy tekst jest Palindromem
     }
-    public static boolean isPalindrome(String check){
+    public boolean isPalindrome(String check){
         boolean palindrom = false;
         check = check.replaceAll("\\s+","");
         char[] tablica = check.toCharArray();

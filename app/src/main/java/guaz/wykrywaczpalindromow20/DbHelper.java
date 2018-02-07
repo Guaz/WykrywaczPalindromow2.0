@@ -6,28 +6,22 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import android.util.Log;
-
-/**
- * Created by Guaz on 2017-01-25.
- */
 
 public class DbHelper extends SQLiteOpenHelper implements BaseColumns {
 
-    private static final String DATABASE_NAME = "baza.db";
+    private static final String DATABASE_NAME = "database.db";
     private static final int DATABASE_VERSION = 1;
 
     public static final String TABLE_NAME = "RESULTS";
 
-    //_ID z BaseColumns
-    public static final String COL2 = "CONTENT";
-    public static final String COL3 = "RESULT";
+    public static final String _COL2 = "CONTENT";
+    public static final String _COL3 = "RESULT";
 
     String CREATE_RESULTS_TABLE = "CREATE TABLE " + TABLE_NAME +
             " ( " +
             _ID + " INTEGER PRIMARY KEY," +
-            COL2 + " TEXT , " +
-            COL3 + " TEXT  " +
+            _COL2 + " TEXT , " +
+            _COL3 + " TEXT  " +
             " ) ";
 
     String CLEAR_RESULTS_TABLE = "DELETE FROM " + TABLE_NAME;
@@ -50,8 +44,8 @@ public class DbHelper extends SQLiteOpenHelper implements BaseColumns {
     public boolean insertData(String content, boolean result) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL2, content);
-        contentValues.put(COL3, result);
+        contentValues.put(_COL2, content);
+        contentValues.put(_COL3, result);
         long insertResult = db.insert(TABLE_NAME, null, contentValues);
 
         //Log.d("wpis", "insertData: "+ insertResult);

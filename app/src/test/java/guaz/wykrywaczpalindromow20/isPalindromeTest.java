@@ -5,9 +5,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-/**
- * Created by Guaz on 2017-01-22.
- */
+
 public class isPalindromeTest {
     @Test
     public void testTrue(){
